@@ -9,16 +9,14 @@ const funcPromise = () => {
 };
 
 const chainedPromise = (prom) => {
-  let res = 'Succes!';
   if (prom) {
-    res = prom().then((res) => {
+    let res = prom().then((res) => {
       return res;
     });
+    return new Promise((resolve) => {
+      resolve(res);
+    });
   }
-
-  return new Promise((resolve) => {
-    resolve(res);
-  });
 };
 const rejectedPromise = () => {
   return new Promise((resolve, reject) => {
