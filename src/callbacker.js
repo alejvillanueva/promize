@@ -1,3 +1,7 @@
+const areAllFuncs = (funcs) => {
+  return funcs.every((func) => typeof func === 'function');
+};
+
 const syncCallbacker = function (funcOne, funcTwo, ...funcs) {
   if (typeof funcOne !== 'function' || typeof funcTwo !== 'function') {
     throw 'You need to feed me functions';
@@ -6,8 +10,7 @@ const syncCallbacker = function (funcOne, funcTwo, ...funcs) {
   let results = funcTwo(funcOne());
 
   if (funcs.length) {
-    const areAllFuncs = funcs.every((func) => typeof func === 'function');
-    if (!areAllFuncs) {
+    if (!areAllFuncs(funcs)) {
       throw 'Something is a NOT a function';
     }
 
@@ -24,12 +27,17 @@ const asyncCallbacker = function (funcOne, funcTwo, ...funcs) {
     throw 'You need to feed me functions';
   }
 
-  /*
-  let areAllFuncs = funcs.every((func) => typeof func === 'function');
-    if (!areAllFuncs) {
-      throw 'Something is a function';
+  funcOne((data = funcTwo), (res) => {
+    if (typeof data !== 'function') {
+      return data;
+    } else {
+      data(res, () => {
+        return res;
+      });
     }
-  */
+  });
 };
+
+// return results;
 
 module.exports = { syncCallbacker, asyncCallbacker };
